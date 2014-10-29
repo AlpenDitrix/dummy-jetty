@@ -3,46 +3,55 @@ package com.avapira.dummy_indexer.indexer;
 import java.util.ArrayList;
 
 /**
- *
+ * Instance of that class stores information of all word occurrences into one specified file. Also,
+ * when user made search request for this word, ambit of that word will be cached (for displaying it to user)
  */
 public class RendezVous {
-    private final ArrayList<Place> places = new ArrayList<Place>();
-    private final int file;
-    private boolean hasAmbits = false;
-
-    public RendezVous(int file, int at) {
-        this.file = file;
-        places.add(new Place(at));
-    }
+    /**
+     * List of all word occurrence locations
+     */
+    private final ArrayList<Place> places    = new ArrayList<>();
+    /**
+     * Is ambits are already generated for this word
+     */
+    private       boolean          hasAmbits = false;
 
     public ArrayList<Place> getPlaces() {
         return places;
     }
 
-    public int getFile() {
-        return file;
-    }
-
+    /**
+     * Add new word occurrence location
+     *
+     * @param at strict location into the file
+     */
     public void met(int at) {
         places.add(new Place(at));
     }
 
+    /**
+     * Caches ambit for all places where that word was found.
+     *
+     * @param source file-string
+     */
     public void generateAmbit(String source) {
-        for (int i = 0; i < places.size(); i++) {
-            Place p = places.get(i);
+        for (Place p : places) {
             int start = p.getLocation() - 60;
             int end = p.getLocation() + 60;
-            while (start > 0 && source.charAt(start) != ' ') {
+            while (start > 0 && source.charAt(start) != ' ') { // jump to space or string start
                 start--;
             }
             start = start < 0 ? 0 : start;
             end = source.indexOf(' ', end);
-            end = end == -1 ? source.length() - 1 : end;
+            end = end == -1 ? source.length() - 1 : end; // jump to space or string end
             p.setAmbit(source.substring(start, end));
         }
         hasAmbits = true;
     }
 
+    /**
+     * @return [] if no occurrences of that word was found or [PLACE1, PLACE2, ...]
+     */
     @Override
     public String toString() {
         if (places.size() == 0) {

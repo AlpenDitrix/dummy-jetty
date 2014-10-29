@@ -1,6 +1,7 @@
 package com.avapira.dummy_indexer.indexer;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -8,28 +9,43 @@ import java.io.IOException;
  *
  */
 public class SearchResponse {
-    String    s;
-    WordIndex index;
-    int total = 0;
+    /**
+     * The word to find
+     */
+    String    request;
+    /**
+     * {@link com.avapira.dummy_indexer.indexer.WordIndex} for this word.
+     */
+    WordIndex wordIndex;
 
-    public SearchResponse(String s, WordIndex index) throws IOException {
-        this.s = s;
-        this.index = index;
+    public SearchResponse(String request, WordIndex wordIndex) throws IOException {
+        this.request = request;
+        this.wordIndex = wordIndex;
+        tryCreateAmbits();
+    }
 
-        for (RendezVous rv : index.getMeetings().values()) {
+    /**
+     * Creates ambits for all occurrences if they was not cached yet
+     *
+     * @throws IOException if some file where that word was met are unable to read
+     */
+    private void tryCreateAmbits() throws IOException {
+        for (int file : wordIndex.getMeetings().keySet()) {
+            RendezVous rv = wordIndex.getMeetings().get(file);
             if (!rv.hasAmbits()) {
-                String source = new BufferedReader(new FileReader(InvertedIndex.files.get(rv.getFile()))).readLine();
+                File f = InvertedIndex.getInstance().getFiles().get(file);
+                String source = new BufferedReader(new FileReader(f)).readLine();
+
                 rv.generateAmbit(source);
             }
-            total += rv.getPlaces().size();
         }
     }
 
     public String getRequest() {
-        return s;
+        return request;
     }
 
-    public WordIndex getIndex() {
-        return index;
+    public WordIndex getWordIndex() {
+        return wordIndex;
     }
 }
