@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- *
+ * Object to send to user to display it on the JSP-page
  */
 public class SearchResponse {
     /**
