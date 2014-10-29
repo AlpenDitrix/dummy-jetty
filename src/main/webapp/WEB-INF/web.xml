@@ -3,5 +3,14 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+    
+    <servlet>
+        <servlet-name>searcher</servlet-name>
+        <servlet-class>com.avapira.dummy_indexer.server.SearchServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>searcher</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+    
 </web-app>
