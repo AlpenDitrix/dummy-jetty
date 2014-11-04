@@ -19,13 +19,13 @@
 
 <c:if test="${not empty q}">
     <div>
-        Request: ${q} </br>
-        Total occurrences in all files: ${chw.totalOccurrencesAmount}<p>
+        Запрос: ${q} </br>
+        Всего вхождений: ${chw.totalOccurrencesAmount}<p>
         <table border=1>
             <tr>
                 <td>#</td>
-                <td>File index</td>
-                <td>Occurrences</td>
+                <td>Номер файла</td>
+                <td>Окрестность</td>
             </tr>
             <c:forEach var="rendezvois" items="${chw.rvs}" varStatus="idx">
                 <tr>

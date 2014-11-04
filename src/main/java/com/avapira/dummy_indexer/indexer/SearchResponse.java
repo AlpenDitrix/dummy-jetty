@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,6 +58,26 @@ public class SearchResponse {
 
     public WordIndex getWordIndex() {
         return wordIndex;
+    }
+
+    public void intersect(SearchResponse searchResponse) {
+        Map<Integer, RendezVous> m1 = wordIndex.getMeetings();
+        Map<Integer, RendezVous> m2 = searchResponse.getWordIndex().getMeetings();
+        List<Integer> marker = new ArrayList<>();
+        for (Integer file : m1.keySet()) {
+            RendezVous rv2 = m2.get(file);
+            if (rv2 != null) {
+                ArrayList places1 = m1.get(file).getPlaces();
+                ArrayList places2 = rv2.getPlaces();
+                places1.addAll(places2);
+            } else {
+                marker.add(file);
+            }
+        }
+        for (Integer i : marker) {
+            m1.remove(i);
+        }
+
     }
 
 }

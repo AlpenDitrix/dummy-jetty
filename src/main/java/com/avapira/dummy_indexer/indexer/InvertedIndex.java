@@ -125,6 +125,15 @@ public class InvertedIndex {
         return new SearchResponse(s, words.get(s));
     }
 
+    public SearchResponse search(ArrayList<String> ss) throws IOException {
+        SearchResponse sr = new SearchResponse(ss.get(0), words.get(ss.get(0)));
+        for (int i = 1; i<ss.size(); i++) {
+            String s = ss.get(i);
+            sr.intersect(new SearchResponse(s, words.get(s)));
+        }
+        return sr;
+    }
+
     @Override
     public String toString() {
         return words.toString();
