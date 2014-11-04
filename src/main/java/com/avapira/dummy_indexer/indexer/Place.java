@@ -5,7 +5,7 @@ package com.avapira.dummy_indexer.indexer;
  * When user made request for this word also ambit (for displaying to user) will be cached at {@link
  * com.avapira.dummy_indexer.indexer.RendezVous#generateAmbit(String, String)}
  */
-class Place {
+public class Place {
     /**
      * Index of place there some word was occurred in some file.
      */

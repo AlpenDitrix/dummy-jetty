@@ -48,4 +48,5 @@ public class SearchServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("search.jsp").forward(req, resp);
     }
+
 }

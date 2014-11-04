@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Instance of that class stores information of all word occurrences into one specified file. Also,
  * when user made search request for this word, ambit of that word will be cached (for displaying it to user)
  */
-class RendezVous {
+public class RendezVous {
     /**
      * List of all word occurrence locations
      */

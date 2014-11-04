@@ -20,7 +20,7 @@
 <c:if test="${not empty q}">
     <div>
         Request: ${q} </br>
-        Total occurrences in all files: ${chw.totalOccerrencesAmount}<p>
+        Total occurrences in all files: ${chw.totalOccurrencesAmount}<p>
         <table border=1>
             <tr>
                 <td>#</td>
