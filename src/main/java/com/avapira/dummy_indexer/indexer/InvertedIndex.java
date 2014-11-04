@@ -1,9 +1,11 @@
 package com.avapira.dummy_indexer.indexer;
 
+import javax.servlet.ServletContext;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -13,18 +15,36 @@ import java.util.StringTokenizer;
  */
 public class InvertedIndex {
 
-    private static InvertedIndex instance = new InvertedIndex();
+    private static ArrayList<InputStream> streams;
+    private static boolean OK = false;
+    private static InvertedIndex instance;
     /**
      * Map of files what will be or was indexed
      */
-    private final Map<Integer, File> files = new HashMap<>();
+    private final Map<Integer, InputStream> files = new HashMap<>();
     /**
      * Mapping of found words to info about that places (file and strict place)
      */
-    private final Map<String, WordIndex> words = new HashMap<>();
+    private final Map<String, WordIndex>    words = new HashMap<>();
 
     private InvertedIndex() {
         rescan();
+    }
+
+    public static void tryInit(ServletContext sc) {
+        if (OK) {
+            return;
+        }
+        final String fmt = "/index/uliss18_%s";
+        int i = 0;
+        streams = new ArrayList<>();
+        InputStream is = sc.getResourceAsStream(String.format(fmt, i));
+        while (is != null) {
+            streams.add(is);
+            is = sc.getResourceAsStream(String.format(fmt, ++i));
+        }
+        instance = new InvertedIndex();
+        OK = true;
     }
 
     public static InvertedIndex getInstance() {
@@ -34,18 +54,13 @@ public class InvertedIndex {
     /**
      * Refreshes wordIndex of files at 'resources/wordIndex'
      */
-    public synchronized void rescan() {
+    private synchronized void rescan() {
         files.clear();
         words.clear();
-        File indexFolder = new File("index");
-        File[] ff = indexFolder.listFiles();
-        if (ff == null) {
-            throw new RuntimeException("List of 'indexFolder' files appears as 'null'");
-        }
 
         int i = 0;
-        for (File f : ff) {
-            files.put(i++, f);
+        for (InputStream is : streams) {
+            files.put(i++, is);
         }
 
         try {
@@ -62,14 +77,14 @@ public class InvertedIndex {
      */
     private void doIndex() throws IOException {
         for (int i = 0; i < files.size(); i++) {
-            File f = files.get(i);
-            String s = new BufferedReader(new FileReader(f)).readLine();
+            InputStream is = files.get(i);
+            String s = new BufferedReader(new InputStreamReader(is)).readLine();
             tokenize(s, i);
         }
     }
 
     /**
-     * Parses file-string word-by-word to make it'request indexation
+     * Parses file-string word-by-word processing indexation
      *
      * @param s      string representation of data file
      * @param fileId id of file which is processing now
@@ -115,7 +130,7 @@ public class InvertedIndex {
         return words.toString();
     }
 
-    public Map<Integer, File> getFiles() {
+    public Map<Integer, InputStream> getFiles() {
         return files;
     }
 }

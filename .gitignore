@@ -5,6 +5,8 @@
 .mtj.tmp/
 
 # Package Files #
+
+
 *.jar
 *.war
 *.ear
@@ -16,4 +18,3 @@ hs_err_pid*
 # IntelliJ IDEA files
 .idea/
 *.iml
-

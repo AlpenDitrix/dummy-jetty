@@ -3,9 +3,9 @@ package com.avapira.dummy_indexer.indexer;
 /**
  * Info about some word occurrence string location into the some file.
  * When user made request for this word also ambit (for displaying to user) will be cached at {@link
- * com.avapira.dummy_indexer.indexer.RendezVous#generateAmbit(String)}
+ * com.avapira.dummy_indexer.indexer.RendezVous#generateAmbit(String, String)}
  */
-public class Place {
+class Place {
     /**
      * Index of place there some word was occurred in some file.
      */
@@ -23,4 +23,5 @@ public class Place {
     public String getAmbit() { return ambit; }
 
     public void setAmbit(String s) { ambit = s; }
+
 }

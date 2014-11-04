@@ -6,15 +6,24 @@ import java.util.ArrayList;
  * Instance of that class stores information of all word occurrences into one specified file. Also,
  * when user made search request for this word, ambit of that word will be cached (for displaying it to user)
  */
-public class RendezVous {
+class RendezVous {
     /**
      * List of all word occurrence locations
      */
     private final ArrayList<Place> places    = new ArrayList<>();
+    private final int file;
     /**
      * Is ambits are already generated for this word
      */
-    private       boolean          hasAmbits = false;
+    private boolean hasAmbits = false;
+
+    public RendezVous(int file) {
+        this.file = file;
+    }
+
+    public int getFile() {
+        return file;
+    }
 
     public ArrayList<Place> getPlaces() {
         return places;
@@ -34,7 +43,7 @@ public class RendezVous {
      *
      * @param source file-string
      */
-    public void generateAmbit(String source) {
+    public void generateAmbit(String source, String word) {
         for (Place p : places) {
             int start = p.getLocation() - 60;
             int end = p.getLocation() + 60;
@@ -44,7 +53,8 @@ public class RendezVous {
             start = start < 0 ? 0 : start;
             end = source.indexOf(' ', end);
             end = end == -1 ? source.length() - 1 : end; // jump to space or string end
-            p.setAmbit(source.substring(start, end));
+            p.setAmbit(source.substring(start, end).replace(" " + word + " ", "<b> " + word + " </b>"));
+            //todo: выделение слова в окрестности должно работять и для крайних позиций
         }
         hasAmbits = true;
     }

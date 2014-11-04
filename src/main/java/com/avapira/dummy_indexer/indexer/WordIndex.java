@@ -1,6 +1,7 @@
 package com.avapira.dummy_indexer.indexer;
 
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -12,11 +13,17 @@ public class WordIndex {
     /**
      * Mapping of file wordIndex to {@link com.avapira.dummy_indexer.indexer.RendezVous} instances,
      * which stores all meetings of word in specified file.
+     * <p/>
+     * Linked map needed because I want to receive occurrences in files sorted by the file index.
      */
-    private final Map<Integer, RendezVous> meetings = new HashMap<>();
+    private final Map<Integer, RendezVous> meetings = new LinkedHashMap<>();
 
     public Map<Integer, RendezVous> getMeetings() {
         return meetings;
+    }
+
+    public Collection<RendezVous> getRvs() {
+        return meetings.values();
     }
 
     /**
@@ -30,7 +37,7 @@ public class WordIndex {
         if (rv != null) {
             rv.met(at);
         } else { // word has not met in that file before
-            meetings.put(file, new RendezVous());
+            meetings.put(file, new RendezVous(file));
             meetings.get(file).met(at);
         }
     }
@@ -60,7 +67,7 @@ public class WordIndex {
     /**
      * @return total amount of some word occurrences
      */
-    public int getTotalOccerrencesAmount() {
+    public int getTotalOccurrencesAmount() {
         int total = 0;
         for (RendezVous rv : meetings.values()) {
             total += rv.getPlaces().size();
@@ -71,7 +78,7 @@ public class WordIndex {
     /**
      * @return amount of some word occurrences in specified file
      */
-    public int getFileOccerrencesAmount(int file) {
+    public int getFileOccurrencesAmount(int file) {
         RendezVous rv = meetings.get(file);
         if (rv == null) {
             return 0;
