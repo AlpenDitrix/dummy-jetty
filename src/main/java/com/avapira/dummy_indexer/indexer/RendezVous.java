@@ -52,9 +52,14 @@ public class RendezVous {
             }
             start = start < 0 ? 0 : start;
             end = source.indexOf(' ', end);
-            end = end == -1 ? source.length() - 1 : end; // jump to space or string end
-            p.setAmbit(source.substring(start, end).replace(" " + word + " ", "<b> " + word + " </b>"));
-            //todo: выделение слова в окрестности должно работять и для крайних позиций
+            end = end == -1 ? source.length() : end; // jump to space or string end
+            String ambit = source.substring(start, end).replace(" " + word + " ", "<b> " + word + " </b>");
+            if (ambit.startsWith(word)) {
+                ambit = "<b>" + word + "</b>" + ambit.substring(word.length());
+            } else if (ambit.endsWith(word)) {
+                ambit = ambit.substring(0, ambit.length() - word.length() ) + "<b>" + word + "</b>";
+            }
+            p.setAmbit(ambit);
         }
         hasAmbits = true;
     }
