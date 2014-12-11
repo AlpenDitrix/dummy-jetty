@@ -15,10 +15,15 @@ public class RendezVous {
     /**
      * Is ambits are already generated for this word
      */
-    private boolean hasAmbits = false;
+    private boolean hasAmbit = false;
 
-    public RendezVous(int file) {
+    public RendezVous(int file, boolean hasAmbit) {
         this.file = file;
+        this.hasAmbit = hasAmbit;
+    }
+
+    public RendezVous(int file){
+        this(file, false);
     }
 
     public int getFile() {
@@ -61,7 +66,7 @@ public class RendezVous {
             }
             p.setAmbit(ambit);
         }
-        hasAmbits = true;
+        hasAmbit = true;
     }
 
     /**
@@ -87,6 +92,6 @@ public class RendezVous {
 
 
     public boolean hasAmbits() {
-        return hasAmbits;
+        return hasAmbit;
     }
 }

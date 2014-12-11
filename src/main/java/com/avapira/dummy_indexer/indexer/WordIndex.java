@@ -16,7 +16,15 @@ public class WordIndex {
      * <p/>
      * Linked map needed because I want to receive occurrences in files sorted by the file index.
      */
-    private final Map<Integer, RendezVous> meetings = new LinkedHashMap<>();
+    private final Map<Integer, RendezVous> meetings;
+
+    public WordIndex(Map<Integer, RendezVous> mResult) {
+        meetings = mResult;
+    }
+
+    public WordIndex() {
+        meetings = new LinkedHashMap<>();
+    }
 
     public Map<Integer, RendezVous> getMeetings() {
         return meetings;

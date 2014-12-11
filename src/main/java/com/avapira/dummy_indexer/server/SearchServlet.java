@@ -33,7 +33,7 @@ public class SearchServlet extends HttpServlet {
 
         try {
             SearchResponse sr = InvertedIndex.getInstance().search(urs);
-            int found = sr.getWordIndex().getTotalOccurrencesAmount();
+            int found = sr.getWordIndex() == null ? 0 : sr.getWordIndex().getTotalOccurrencesAmount();
             req.setAttribute("q", userRequest);
             req.setAttribute("chw", sr.getWordIndex());
             if (found > 0) {

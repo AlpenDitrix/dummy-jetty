@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,10 +21,14 @@ public class SearchResponse {
      */
     private final WordIndex wordIndex;
 
-    public SearchResponse(String request, WordIndex wordIndex) throws IOException {
+    public SearchResponse(String request, WordIndex wordIndex) {
         this.request = request;
         this.wordIndex = wordIndex;
-        tryCreateAmbits();
+        try {
+            tryCreateAmbits();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -60,24 +64,24 @@ public class SearchResponse {
         return wordIndex;
     }
 
-    public void intersect(SearchResponse searchResponse) {
-        Map<Integer, RendezVous> m1 = wordIndex.getMeetings();
-        Map<Integer, RendezVous> m2 = searchResponse.getWordIndex().getMeetings();
-        List<Integer> marker = new ArrayList<>();
+    public static SearchResponse intersect(SearchResponse s1, SearchResponse s2) {
+        Map<Integer, RendezVous> m1 = s1.getWordIndex().getMeetings();
+        Map<Integer, RendezVous> m2 = s2.getWordIndex().getMeetings();
+        Map<Integer, RendezVous> mResult = new HashMap<>();
         for (Integer file : m1.keySet()) {
             RendezVous rv2 = m2.get(file);
-            if (rv2 != null) {
-                ArrayList places1 = m1.get(file).getPlaces();
-                ArrayList places2 = rv2.getPlaces();
-                places1.addAll(places2);
-            } else {
-                marker.add(file);
+            if (rv2 != null) { // both in file
+                ArrayList<Place> places1 = m1.get(file).getPlaces();
+                ArrayList<Place> places2 = rv2.getPlaces();
+                if(null != mResult.put(file, new RendezVous(file, true))) {
+                    throw new RuntimeException("Duplicate file indexing");
+                }
+                ArrayList<Place> placesRes = mResult.get(file).getPlaces();
+                placesRes.addAll(places1);
+                placesRes.addAll(places2);
             }
         }
-        for (Integer i : marker) {
-            m1.remove(i);
-        }
-
+        return new SearchResponse(s1.getRequest().concat(" ").concat(s2.getRequest()), new WordIndex(mResult));
     }
 
 }

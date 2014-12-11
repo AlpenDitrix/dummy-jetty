@@ -129,7 +129,7 @@ public class InvertedIndex {
         SearchResponse sr = new SearchResponse(ss.get(0), words.get(ss.get(0)));
         for (int i = 1; i<ss.size(); i++) {
             String s = ss.get(i);
-            sr.intersect(new SearchResponse(s, words.get(s)));
+            sr = SearchResponse.intersect(sr,new SearchResponse(s, words.get(s)));
         }
         return sr;
     }

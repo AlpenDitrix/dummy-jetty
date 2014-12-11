@@ -20,25 +20,30 @@
 <c:if test="${not empty q}">
     <div>
         Запрос: ${q} </br>
-        Всего вхождений: ${chw.totalOccurrencesAmount}<p>
-        <table border=1>
-            <tr>
-                <td>#</td>
-                <td>Номер файла</td>
-                <td>Окрестность</td>
-            </tr>
-            <c:forEach var="rendezvois" items="${chw.rvs}" varStatus="idx">
+        <c:if test="${not empty chw}">
+            Всего вхождений: ${chw.totalOccurrencesAmount}<p>
+            <table border=1>
                 <tr>
-                    <td>${idx.index}</td>
-                    <td><a href="/index/uliss18_${rendezvois.file}">${rendezvois.file}</a></td>
-                    <td>
-                        <c:forEach var="place" items="${rendezvois.places}">
-                            #${place.location}: ${place.ambit}<br>
-                        </c:forEach>
-                    </td>
+                    <td>#</td>
+                    <td>Номер файла</td>
+                    <td>Окрестность</td>
                 </tr>
-            </c:forEach>
-        </table>
+                <c:forEach var="rendezvois" items="${chw.rvs}" varStatus="idx">
+                    <tr>
+                        <td>${idx.index}</td>
+                        <td><a href="/index/uliss18_${rendezvois.file}">${rendezvois.file}</a></td>
+                        <td>
+                            <c:forEach var="place" items="${rendezvois.places}">
+                                #${place.location}: ${place.ambit}<br>
+                            </c:forEach>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </table
+        </c:if>
+        <c:if test="${empty chw}">
+            Не найдено вхождений такого полного наборов слов ни в один файл
+        </c:if>
     </div>
 </c:if>
 </body>
